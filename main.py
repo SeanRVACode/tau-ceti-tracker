@@ -1,3 +1,6 @@
+from routes import runs
+
+
 def main():
     print("Hello from tau-ceti-tracker!")
 
