@@ -1,5 +1,5 @@
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey, CheckConstraint, Boolean, Integer, DateTime
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import String, CheckConstraint, Boolean, Integer, DateTime
 from sqlalchemy.sql import func
 from datetime import datetime
 
