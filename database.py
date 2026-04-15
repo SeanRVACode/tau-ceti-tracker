@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey, CheckConstraint, Boolean, Integer, Date
+from sqlalchemy import String, ForeignKey, CheckConstraint, Boolean, Integer, DateTime
 from sqlalchemy.sql import func
 from datetime import datetime
 
@@ -28,7 +28,7 @@ class Runs(Base):
     )
     exfiled: Mapped[bool] = mapped_column(Boolean, default=False)  # Todo do I really want this to default to False?
     exfil_amount: Mapped[int] = mapped_column(Integer, default=0)
-    date: Mapped[datetime] = mapped_column(Date, server_default=func.current_date())
+    date: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     runner_downs: Mapped[int] = mapped_column(Integer, default=0)
     uesc_elims: Mapped[int] = mapped_column(Integer, default=0)
     rook_friends: Mapped[bool] = mapped_column(Boolean, default=False)
