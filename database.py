@@ -3,12 +3,26 @@ from sqlalchemy import String, CheckConstraint, Boolean, Integer, DateTime
 from sqlalchemy.sql import func
 from datetime import datetime
 from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
 # Todo eventually have this come from an environment variable instead of hard coded.
 DATABASE_URL = "sqlite+pysqlite:///:memory:"
 
 # Create engine here. This basically states what type of database we are using and how to connect to it.
 engine = create_engine(DATABASE_URL)
+
+
+def get_session():
+    try:
+        # Start the session
+        session = Session(engine)
+        yield session
+    except Exception as e:
+        print(e)
+        raise e
+    finally:
+        # Clean up the session once complete.
+        session.close()
 
 
 class Base(DeclarativeBase):
