@@ -1,9 +1,7 @@
-from routes import runs
 from fastapi import FastAPI
-from database import Runs
+from database import Base
 from contextlib import asynccontextmanager
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
 
 
 DATABASE_URL = "sqlite+pysqlite:///:memory:"
@@ -13,10 +11,8 @@ DATABASE_URL = "sqlite+pysqlite:///:memory:"
 async def lifespan(app: FastAPI):
     # Create the engine
     engine = create_engine(DATABASE_URL, echo=True)
-    # Create the session
-    session = Session(engine)
     # Create all the tables and check to see if they exist.
-    Runs.metadata.create_all()
+    Base.metadata.create_all(engine=engine)  # This knows which database to apply this to based on the engine
     yield
     pass
 

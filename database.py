@@ -5,6 +5,7 @@ from datetime import datetime
 
 
 class Base(DeclarativeBase):
+    # Base is aware of all the classes that inherit from it so it should be the main one I call
     pass
 
 
