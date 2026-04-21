@@ -11,3 +11,4 @@ class RunCreate(BaseModel):
     uesc_elims: int
     rook_friends: bool
     team_mates_rezzed: int
+    runner_downs: int

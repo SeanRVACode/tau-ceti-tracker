@@ -3,6 +3,7 @@ from models import RunCreate
 from database import get_session, Runs
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func
 
 router = APIRouter()
 
@@ -22,6 +23,8 @@ async def post_run(run: RunCreate, session: Session = Depends(get_session)):
         session.refresh(current_run)
         return current_run
     except IntegrityError as e:
+        # Todo probably implement logging to handle the exception.
+        print(e)
         session.rollback()
         raise HTTPException(status_code=400, detail="Invalid Entry")
 
@@ -31,3 +34,27 @@ async def get_run(session: Session = Depends(get_session)):
     all_runs = session.query(Runs).all()
 
     return all_runs
+
+
+@router.get("/stats")
+async def show_stats(session: Session = Depends(get_session)):
+    """
+
+    Args:
+        session (Session, optional): SqlAlchemy Session that is retrieved with get_session method. Defaults to Depends(get_session).
+    """
+    # Total Runs
+    total_runs = session.query(Runs).count()
+    print(total_runs)
+    if total_runs > 0:
+        # Successful runs based on exfil being true
+        total_successful_exfils = session.query(Runs).where(Runs.exfiled).count()
+        # Determine exfil rate
+        exfil_rate = format((total_successful_exfils / total_runs), ".0%")
+        # K/D Ratio
+        total_elims = session.query(func.sum(Runs.runner_downs)).scalar()
+        elims_ratio = total_elims / total_runs
+
+    else:
+        # Set exfil rate to 0 if there are no runs.
+        exfil_rate = 0
