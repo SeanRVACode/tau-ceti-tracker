@@ -43,18 +43,26 @@ async def show_stats(session: Session = Depends(get_session)):
     Args:
         session (Session, optional): SqlAlchemy Session that is retrieved with get_session method. Defaults to Depends(get_session).
     """
+
+    # Ini stats dict
+    stats = {}
     # Total Runs
     total_runs = session.query(Runs).count()
-    print(total_runs)
+    stats["total_runs"] = total_runs
     if total_runs > 0:
         # Successful runs based on exfil being true
         total_successful_exfils = session.query(Runs).where(Runs.exfiled).count()
         # Determine exfil rate
         exfil_rate = format((total_successful_exfils / total_runs), ".0%")
+        stats["exfil_rate"] = exfil_rate
         # K/D Ratio
         total_elims = session.query(func.sum(Runs.runner_downs)).scalar()
-        elims_ratio = total_elims / total_runs
-
+        stats["total_elims"] = total_elims
+        # Calculate k/d ratio
+        elims_ratio = format(total_elims / total_runs, ".2f")
+        stats["kd_ratio"] = elims_ratio
     else:
         # Set exfil rate to 0 if there are no runs.
-        exfil_rate = 0
+        stats["exfil_rate"] = 0
+
+    return stats
