@@ -4,12 +4,15 @@ from sqlalchemy.sql import func
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 # Todo eventually have this come from an environment variable instead of hard coded.
 DATABASE_URL = "sqlite+pysqlite:///:memory:"
 
 # Create engine here. This basically states what type of database we are using and how to connect to it.
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL, connect_args={"check_same_thread": False}
+)  # For sqlite we set check_same_thread to false as sqlite doesn't allow for cross thread.
 
 
 def get_session():
