@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.post("/run", response_model=RunShow)
-async def post_run(run: RunCreate, session: Session = Depends(get_session)) -> Dict:
+async def post_run(run: RunCreate, session: Session = Depends(get_session)) -> RunShow:
     """_Post a new run to the database_.
 
     Args:
@@ -21,7 +21,7 @@ async def post_run(run: RunCreate, session: Session = Depends(get_session)) -> D
         HTTPException: _description_
 
     Returns:
-        _Dict_: _Dict of the run just posted_.
+        _RunShow_: _Dict of the run just posted, based off SQLAlchemy ORM_.
     """
     try:
         # Turn the entry into a dict
