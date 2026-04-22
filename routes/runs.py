@@ -1,15 +1,28 @@
 from fastapi import APIRouter, Depends, HTTPException
-from models import RunCreate
+from models import RunCreate, RunShow
 from database import get_session, Runs
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
+from typing import Dict
 
 router = APIRouter()
 
 
-@router.post("/run")
-async def post_run(run: RunCreate, session: Session = Depends(get_session)):
+@router.post("/run", response_model=RunShow)
+async def post_run(run: RunCreate, session: Session = Depends(get_session)) -> Dict:
+    """_Post a new run to the database_.
+
+    Args:
+        run (RunCreate): _Pydantic model of a run_.
+        session (Session, optional): _SQLAlchemy Session_. Defaults to Depends(get_session).
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _Dict_: _Dict of the run just posted_.
+    """
     try:
         # Turn the entry into a dict
         run_dict = run.model_dump()
@@ -30,18 +43,26 @@ async def post_run(run: RunCreate, session: Session = Depends(get_session)):
 
 
 @router.get("/all_runs")
-async def get_run(session: Session = Depends(get_session)):
+async def get_run(session: Session = Depends(get_session)) -> dict:
+    """_summary_
+
+    Args:
+        session (Session, optional): _description_. Defaults to Depends(get_session).
+
+    Returns:
+        dict: _description_
+    """
     all_runs = session.query(Runs).all()
 
     return all_runs
 
 
 @router.get("/stats")
-async def show_stats(session: Session = Depends(get_session)):
+async def show_stats(session: Session = Depends(get_session)) -> dict:
     """
 
     Args:
-        session (Session, optional): SqlAlchemy Session that is retrieved with get_session method. Defaults to Depends(get_session).
+        session (Session, optional): _SqlAlchemy Session_ that is retrieved with get_session method. Defaults to Depends(get_session).
     """
 
     # Ini stats dict

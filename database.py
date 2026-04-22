@@ -4,7 +4,7 @@ from sqlalchemy.sql import func
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
+
 
 # Todo eventually have this come from an environment variable instead of hard coded.
 DATABASE_URL = "sqlite+pysqlite:///:memory:"
