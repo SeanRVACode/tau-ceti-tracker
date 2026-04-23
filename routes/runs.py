@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from models import RunCreate, RunShow
+from models import RunCreate, RunShow, RunUpdate
 from database import get_session, Runs
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -87,3 +87,30 @@ async def show_stats(session: Session = Depends(get_session)) -> dict:
         stats["exfil_rate"] = 0
 
     return stats
+
+
+@router.patch("/run_edit/{id_num}", response_model=RunShow)
+async def edit_run(id_num: int, run_update: RunUpdate, session: Session = Depends(get_session)) -> RunShow:
+    try:
+        # Retrieve the run that needs to be edited from the database
+        run_to_edit = session.query(Runs).where(Runs.id == id_num).first()
+        # If no run is found
+        if not run_to_edit:
+            raise HTTPException(status_code=404, detail="No run matching that ID")
+        # Create a set of the fields that were edited.
+        fields = (
+            run_update.model_fields_set
+        )  # model_fields_set shows the fields that were filled in when it was initialized.
+        for field in fields:
+            # Change the fields by cycling through and retreiving the values.
+            setattr(run_to_edit, field, getattr(run_update, field))
+        # Commit the changes to the database.
+        session.commit()
+        # Refresh run_to_edit with the changes
+        session.refresh(run_to_edit)
+        # Return the changes for the user to see
+        return run_to_edit
+    except IntegrityError as e:
+        print(e)
+        session.rollback()
+        raise
