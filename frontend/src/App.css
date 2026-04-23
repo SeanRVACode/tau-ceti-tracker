@@ -1,0 +1,16 @@
+.main {
+  flex: 1;
+  padding: 0 0 32px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 0 24px;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}

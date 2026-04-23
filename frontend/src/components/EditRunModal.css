@@ -1,0 +1,124 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--near-black);
+  border: 1px solid var(--border-bright);
+  padding: 24px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.15);
+  animation: slideDown 0.2s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.15em;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.modal-close:hover {
+  color: var(--red);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* Reuse form-field styles from AddRunForm */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-field label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.form-field input[type='number'],
+.form-field select {
+  background: var(--black);
+  border: 1px solid var(--border);
+  color: var(--green);
+  padding: 6px 8px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  border-color: var(--border-bright);
+}
+
+.form-field select option {
+  background: var(--black);
+}
+
+.form-field--check {
+  justify-content: flex-end;
+}
+
+.form-field--check label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.form-field--check input[type='checkbox'] {
+  accent-color: var(--green);
+  width: 14px;
+  height: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.form-error {
+  color: var(--red);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
