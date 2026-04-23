@@ -42,15 +42,15 @@ async def post_run(run: RunCreate, session: Session = Depends(get_session)) -> R
         raise HTTPException(status_code=400, detail="Invalid Entry")
 
 
-@router.get("/all_runs")
-async def get_run(session: Session = Depends(get_session)) -> dict:
-    """_summary_
+@router.get("/all_runs", response_model=list[RunShow])
+async def get_run(session: Session = Depends(get_session)) -> list[RunShow]:
+    """_Displays all runs from the database_.
 
     Args:
-        session (Session, optional): _description_. Defaults to Depends(get_session).
+        session (Session, optional): _SQLAlchemy session_. Defaults to Depends(get_session).
 
     Returns:
-        dict: _description_
+        RunShow: _Pydantic Model that takes a SQL ORM Object and displays it as a list_.
     """
     all_runs = session.query(Runs).all()
 
