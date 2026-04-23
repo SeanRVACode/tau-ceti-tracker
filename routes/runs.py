@@ -4,7 +4,7 @@ from database import get_session, Runs
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
-from typing import Dict
+
 
 router = APIRouter()
 
@@ -111,6 +111,23 @@ async def edit_run(id_num: int, run_update: RunUpdate, session: Session = Depend
         # Return the changes for the user to see
         return run_to_edit
     except IntegrityError as e:
+        print(e)
+        session.rollback()
+        raise
+
+
+@router.delete("/delete_run/{id_num}")
+async def delete_run(id_num: int, session: Session = Depends(get_session)):
+    try:
+        # Get Sqlalchemy orm object to delete
+        run_to_delete = session.query(Runs).where(Runs.id == id_num).first()
+        if not run_to_delete:
+            raise HTTPException(status_code=404, detail="A run with that ID doesn't exist.")
+        session.delete(run_to_delete)
+        session.commit()
+
+        return {"Message": "Delete Success"}
+    except Exception as e:
         print(e)
         session.rollback()
         raise
