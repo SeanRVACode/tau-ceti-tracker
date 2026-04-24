@@ -38,6 +38,12 @@ async def callback(req: Request):
     user_email = user_info.get("email")
 
     if user_email == os.getenv("owner_email"):
+        req.session["user"] = user_email
         return {"status": "success"}
     else:
         raise HTTPException(status_code=401, detail="User not Authorized.")
+
+
+def require_auth(req: Request):
+    if not req.session.get("user", None):
+        raise HTTPException(status_code=401, detail="Not Authorized")

@@ -3,6 +3,12 @@ from database import Base, engine
 from routes.runs import router
 from contextlib import asynccontextmanager
 from auth import auth_router
+from starlette.middleware.sessions import SessionMiddleware
+import os
+from dotenv import load_dotenv
+
+# Load the environment.
+load_dotenv()
 
 
 @asynccontextmanager
@@ -17,6 +23,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(router=auth_router)
 app.include_router(router=router)
+
+app.add_middleware(SessionMiddleware, secret_key=os.getenv("secret_key"))
 
 
 def main():

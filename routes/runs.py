@@ -4,13 +4,13 @@ from database import get_session, Runs
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
-
+from auth import require_auth
 
 router = APIRouter()
 
 
 @router.post("/run", response_model=RunShow)
-async def post_run(run: RunCreate, session: Session = Depends(get_session)) -> RunShow:
+async def post_run(run: RunCreate, session: Session = Depends(get_session), _=Depends(require_auth)) -> RunShow:
     """_Post a new run to the database_.
 
     Args:
@@ -90,7 +90,9 @@ async def show_stats(session: Session = Depends(get_session)) -> dict:
 
 
 @router.patch("/run_edit/{id_num}", response_model=RunShow)
-async def edit_run(id_num: int, run_update: RunUpdate, session: Session = Depends(get_session)) -> RunShow:
+async def edit_run(
+    id_num: int, run_update: RunUpdate, session: Session = Depends(get_session), _=Depends(require_auth)
+) -> RunShow:
     try:
         # Retrieve the run that needs to be edited from the database
         run_to_edit = session.query(Runs).where(Runs.id == id_num).first()
@@ -117,7 +119,7 @@ async def edit_run(id_num: int, run_update: RunUpdate, session: Session = Depend
 
 
 @router.delete("/delete_run/{id_num}")
-async def delete_run(id_num: int, session: Session = Depends(get_session)):
+async def delete_run(id_num: int, session: Session = Depends(get_session), _=Depends(require_auth)):
     try:
         # Get Sqlalchemy orm object to delete
         run_to_delete = session.query(Runs).where(Runs.id == id_num).first()
