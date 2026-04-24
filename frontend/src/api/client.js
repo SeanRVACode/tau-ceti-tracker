@@ -3,6 +3,7 @@ const BASE = '/api'
 async function request(path, options = {}) {
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'Content-Type': 'application/json', ...options.headers },
+    credentials: 'include',
     ...options,
   })
   if (!res.ok) {
@@ -13,6 +14,7 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  checkAuth:  ()        => request('/auth/me'),
   getStats:   ()        => request('/stats'),
   getAllRuns:  ()        => request('/all_runs'),
   createRun:  (data)    => request('/run', { method: 'POST', body: JSON.stringify(data) }),

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { api } from './api/client'
 import Header from './components/Header'
+import Login from './components/Login'
 import StatsPanel from './components/StatsPanel'
 import AddRunForm from './components/AddRunForm'
 import RunsTable from './components/RunsTable'
@@ -8,12 +9,19 @@ import EditRunModal from './components/EditRunModal'
 import './App.css'
 
 export default function App() {
+  const [authed, setAuthed]     = useState(null)   // null = checking, true/false = result
   const [stats, setStats]       = useState(null)
   const [runs, setRuns]         = useState([])
   const [loading, setLoading]   = useState(true)
   const [statsErr, setStatsErr] = useState(null)
   const [runsErr, setRunsErr]   = useState(null)
   const [editRun, setEditRun]   = useState(null)
+
+  useEffect(() => {
+    api.checkAuth()
+      .then(() => setAuthed(true))
+      .catch(() => setAuthed(false))
+  }, [])
 
   const fetchAll = useCallback(async () => {
     setLoading(true)
@@ -50,6 +58,9 @@ export default function App() {
     await api.deleteRun(id)
     await fetchAll()
   }
+
+  if (authed === null) return null   // still checking session
+  if (!authed) return <Login />
 
   return (
     <>
