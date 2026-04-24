@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, HTTPException
+from fastapi.responses import RedirectResponse
 import os
 from dotenv import load_dotenv
 from authlib.integrations.starlette_client import OAuth
@@ -39,9 +40,18 @@ async def callback(req: Request):
 
     if user_email == os.getenv("owner_email"):
         req.session["user"] = user_email
-        return {"status": "success"}
+        RedirectResponse(url=os.getenv("frontend_url"))
     else:
         raise HTTPException(status_code=401, detail="User not Authorized.")
+
+
+@auth_router.get("/auth/me")
+async def auth_status(req: Request):
+
+    if req.session.get("user") == os.getenv("owner_email"):
+        return {"status_code": 200, "message": "Welcome Runner"}
+    else:
+        return {"status_code": 401, "message": "User not authorized."}
 
 
 def require_auth(req: Request):
