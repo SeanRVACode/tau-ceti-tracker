@@ -11,7 +11,7 @@ function Bool({ val }) {
   return <span className={val ? 'bool-yes' : 'bool-no'}>{val ? 'YES' : 'NO'}</span>
 }
 
-export default function RunsTable({ runs, loading, error, onEdit, onDelete }) {
+export default function RunsTable({ runs, loading, error, authed, onEdit, onDelete }) {
   return (
     <section className="runs-section">
       <div className="panel-header">
@@ -42,7 +42,7 @@ export default function RunsTable({ runs, loading, error, onEdit, onDelete }) {
                 <th>UESC ELIMS</th>
                 <th>REZZED</th>
                 <th>ROOK FRIENDS</th>
-                <th></th>
+                {authed && <th></th>}
               </tr>
             </thead>
             <tbody>
@@ -58,10 +58,12 @@ export default function RunsTable({ runs, loading, error, onEdit, onDelete }) {
                   <td>{run.uesc_elims}</td>
                   <td>{run.team_mates_rezzed}</td>
                   <td><Bool val={run.rook_friends} /></td>
-                  <td className="td-actions">
-                    <button className="btn btn--small" onClick={() => onEdit(run)}>EDIT</button>
-                    <button className="btn btn--small btn--danger" onClick={() => onDelete(run.id)}>DEL</button>
-                  </td>
+                  {authed && (
+                    <td className="td-actions">
+                      <button className="btn btn--small" onClick={() => onEdit(run)}>EDIT</button>
+                      <button className="btn btn--small btn--danger" onClick={() => onDelete(run.id)}>DEL</button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

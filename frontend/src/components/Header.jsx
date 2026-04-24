@@ -1,13 +1,20 @@
 import './Header.css'
 
-export default function Header() {
+export default function Header({ authed }) {
   return (
     <header className="header">
       <div className="header-top-bar">
         <span className="header-label">SYSTEM // TAU CETI FIELD OPS</span>
-        <span className="header-status">
-          <span className="status-dot" /> UPLINK ACTIVE
-        </span>
+        <div className="header-top-right">
+          {!authed && (
+            <a className="header-login-link" href="/api/auth/google/login">
+              [ LOGIN ]
+            </a>
+          )}
+          <span className="header-status">
+            <span className="status-dot" /> UPLINK ACTIVE
+          </span>
+        </div>
       </div>
 
       <div className="header-title-block">

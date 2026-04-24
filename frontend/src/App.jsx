@@ -60,18 +60,18 @@ export default function App() {
   }
 
   if (authed === null) return null   // still checking session
-  if (!authed) return <Login />
 
   return (
     <>
-      <Header />
+      <Header authed={authed} />
       <main className="main">
         <StatsPanel stats={stats} loading={loading} error={statsErr} />
-        <AddRunForm onRunAdded={handleCreateRun} />
+        {authed && <AddRunForm onRunAdded={handleCreateRun} />}
         <RunsTable
           runs={runs}
           loading={loading}
           error={runsErr}
+          authed={authed}
           onEdit={setEditRun}
           onDelete={handleDeleteRun}
         />

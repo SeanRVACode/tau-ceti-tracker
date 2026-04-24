@@ -18,6 +18,24 @@
   padding-bottom: 8px;
 }
 
+.header-top-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-login-link {
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.header-login-link:hover {
+  color: var(--green);
+}
+
 .header-status {
   display: flex;
   align-items: center;
