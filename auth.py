@@ -57,9 +57,7 @@ async def auth_status(req: Request):
 @auth_router.get("/auth/logout")
 async def logout(req: Request):
     req.session.clear()
-    redir = RedirectResponse(url=os.getenv("frontend_url"))
-    redir.delete_cookie("session", httponly=True, samesite="lax")
-    return redir
+    return {"message": "Logged out"}
 
 
 def require_auth(req: Request):

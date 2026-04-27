@@ -3,7 +3,7 @@ from models import RunCreate, RunShow, RunUpdate
 from database import get_session, Runs
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import func
+from sqlalchemy import func, not_
 from auth import require_auth
 
 router = APIRouter()
@@ -79,8 +79,13 @@ async def show_stats(session: Session = Depends(get_session)) -> dict:
         # K/D Ratio
         total_elims = session.query(func.sum(Runs.runner_downs)).scalar()
         stats["total_elims"] = total_elims
+        # total deaths
+        total_deaths = session.query(Runs).where(not_(Runs.exfiled)).count()
+        if total_deaths == 0:
+            total_deaths = 1
+        print(total_deaths)
         # Calculate k/d ratio
-        elims_ratio = format(total_elims / total_runs, ".2f")
+        elims_ratio = format(total_elims / total_deaths, ".2f")
         stats["kd_ratio"] = elims_ratio
     else:
         # Set exfil rate to 0 if there are no runs.

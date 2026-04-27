@@ -44,6 +44,11 @@ export default function App() {
 
   useEffect(() => { fetchAll() }, [fetchAll])
 
+  async function handleLogout() {
+    await api.logout()
+    setAuthed(false)
+  }
+
   async function handleCreateRun(data) {
     await api.createRun(data)
     await fetchAll()
@@ -63,7 +68,7 @@ export default function App() {
 
   return (
     <>
-      <Header authed={authed} />
+      <Header authed={authed} onLogout={handleLogout} />
       <main className="main">
         <StatsPanel stats={stats} loading={loading} error={statsErr} />
         {authed && <AddRunForm onRunAdded={handleCreateRun} />}

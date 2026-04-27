@@ -15,6 +15,7 @@ async function request(path, options = {}) {
 
 export const api = {
   checkAuth:  ()        => request('/auth/me'),
+  logout:     ()        => request('/auth/logout'),
   getStats:   ()        => request('/stats'),
   getAllRuns:  ()        => request('/all_runs'),
   createRun:  (data)    => request('/run', { method: 'POST', body: JSON.stringify(data) }),

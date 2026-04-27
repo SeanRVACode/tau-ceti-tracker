@@ -1,15 +1,15 @@
 import './Header.css'
 
-export default function Header({ authed }) {
+export default function Header({ authed, onLogout }) {
   return (
     <header className="header">
       <div className="header-top-bar">
         <span className="header-label">UESC MARATHON SYSTEM // TAU CETI IV FIELD OPS</span>
         <div className="header-top-right">
-          {!authed && (
-            <a className="header-login-link" href="/api/auth/google/login">
-              [ LOGIN ]
-            </a>
+          {authed ? (
+            <button className="header-login-link" onClick={onLogout}>[ LOGOUT ]</button>
+          ) : (
+            <a className="header-login-link" href="/api/auth/google/login">[ LOGIN ]</a>
           )}
           <span className="header-status">
             <span className="status-dot" /> UPLINK ACTIVE
