@@ -51,15 +51,19 @@ async def auth_status(req: Request):
     if req.session.get("user") == os.getenv("owner_email"):
         return {"status_code": 200, "message": "Welcome Runner"}
     else:
-        return {"status_code": 401, "message": "User not authorized."}
+        raise HTTPException(status_code=401, detail="User not authorized.")
 
 
 @auth_router.get("/auth/logout")
 async def logout(req: Request):
     req.session.clear()
-    return RedirectResponse(url=os.getenv("frontend_url"))
+    redir = RedirectResponse(url=os.getenv("frontend_url"))
+    redir.delete_cookie("session", httponly=True, samesite="lax")
+    return redir
 
 
 def require_auth(req: Request):
+    user = req.session.get("user")
+    print(f"Require auth called for : {user}")
     if not req.session.get("user", None):
         raise HTTPException(status_code=401, detail="Not Authorized")
