@@ -40,7 +40,7 @@ async def callback(req: Request):
 
     if user_email == os.getenv("owner_email"):
         req.session["user"] = user_email
-        RedirectResponse(url=os.getenv("frontend_url"))
+        return RedirectResponse(url=os.getenv("frontend_url"))
     else:
         raise HTTPException(status_code=401, detail="User not Authorized.")
 
@@ -56,7 +56,8 @@ async def auth_status(req: Request):
 
 @auth_router.get("/auth/logout")
 async def logout(req: Request):
-    pass
+    req.session.clear()
+    return RedirectResponse(url=os.getenv("frontend_url"))
 
 
 def require_auth(req: Request):
