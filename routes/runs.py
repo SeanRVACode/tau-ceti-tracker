@@ -70,6 +70,8 @@ async def show_stats(session: Session = Depends(get_session)) -> dict:
     # Total Runs
     total_runs = session.query(Runs).count()
     stats["total_runs"] = total_runs
+
+    # Todo I may want to separate out rook runs as I tend to rapid fire those and you can die far quicker. I also rarely get kills as rook
     if total_runs > 0:
         # Successful runs based on exfil being true
         total_successful_exfils = session.query(Runs).where(Runs.exfiled).count()
