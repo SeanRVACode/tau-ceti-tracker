@@ -61,7 +61,5 @@ async def logout(req: Request):
 
 
 def require_auth(req: Request):
-    user = req.session.get("user")
-    print(f"Require auth called for : {user}")
     if not req.session.get("user", None):
         raise HTTPException(status_code=401, detail="Not Authorized")
