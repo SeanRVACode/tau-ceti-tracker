@@ -4,7 +4,7 @@ export default function Header({ authed }) {
   return (
     <header className="header">
       <div className="header-top-bar">
-        <span className="header-label">SYSTEM // TAU CETI FIELD OPS</span>
+        <span className="header-label">UESC MARATHON SYSTEM // TAU CETI IV FIELD OPS</span>
         <div className="header-top-right">
           {!authed && (
             <a className="header-login-link" href="/api/auth/google/login">
@@ -25,7 +25,7 @@ export default function Header({ authed }) {
       </div>
 
       <div className="header-bottom-bar">
-        <span>CRYO ARCHIVE — SECTOR 7</span>
+        <span>UESC MARATHON — RUNNER RECORD</span>
         <span className="cursor-blink">_</span>
       </div>
     </header>
