@@ -54,6 +54,11 @@ async def auth_status(req: Request):
         return {"status_code": 401, "message": "User not authorized."}
 
 
+@auth_router.get("/auth/logout")
+async def logout(req: Request):
+    pass
+
+
 def require_auth(req: Request):
     if not req.session.get("user", None):
         raise HTTPException(status_code=401, detail="Not Authorized")
