@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 
 # Todo eventually have this come from an environment variable instead of hard coded.
-DATABASE_URL = "sqlite+pysqlite:///:memory:"
+DATABASE_URL = "sqlite+pysqlite:///./tau-ceti.db"
 
 # Create engine here. This basically states what type of database we are using and how to connect to it.
 engine = create_engine(
