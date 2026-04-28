@@ -122,7 +122,7 @@ async def edit_run(
     except IntegrityError as e:
         print(e)
         session.rollback()
-        raise
+        raise HTTPException(status_code=422, detail="Error in editing data no changes were made.")
 
 
 @router.delete("/delete_run/{id_num}")
