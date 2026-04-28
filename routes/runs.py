@@ -83,16 +83,17 @@ async def show_stats(session: Session = Depends(get_session)) -> dict:
         stats["total_elims"] = total_elims
         # total deaths
         total_deaths = session.query(Runs).where(not_(Runs.exfiled)).count()
+        # Handle if we are just starting the database from scratch as you don't want to divide by 0
         if total_deaths == 0:
             total_deaths = 1
-        print(total_deaths)
+
         # Calculate k/d ratio
         elims_ratio = format(total_elims / total_deaths, ".2f")
         stats["kd_ratio"] = elims_ratio
     else:
         # Set exfil rate to 0 if there are no runs.
         stats["exfil_rate"] = 0
-
+    # Return the stats dict
     return stats
 
 
@@ -122,6 +123,7 @@ async def edit_run(
     except IntegrityError as e:
         print(e)
         session.rollback()
+        # Raise an HTTP exception that data was not able to be edited this way.
         raise HTTPException(status_code=422, detail="Error in editing data no changes were made.")
 
 
