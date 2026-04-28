@@ -2,8 +2,9 @@ from fastapi.testclient import TestClient
 from fastapi import Request
 from main import app
 from auth import require_auth
-import os
 
+
+# Fake data for testing purposes.
 DATA = {
     "shell": "destroyer",
     "map_name": "outpost",
@@ -42,7 +43,9 @@ def test_post_with_auth():
 
 
 def test_post_without_auth():
+    # Clear the overrides
     app.dependency_overrides = {}
+    # Run the test with now that there is no override.
     with TestClient(app) as client:
         resp = client.post("/run", json=DATA)
         assert resp.status_code == 401
