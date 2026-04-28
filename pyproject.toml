@@ -1,7 +1,7 @@
 [project]
 name = "tau-ceti-tracker"
 version = "0.1.0"
-description = "Add your description here"
+description = "Personal learning project to help improve my Python skills."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -13,3 +13,5 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "sqlalchemy>=2.0.49",
 ]
+[tool.pytest.ini_options]
+pythonpath = ["."]
