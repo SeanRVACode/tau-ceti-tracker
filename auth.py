@@ -61,5 +61,6 @@ async def logout(req: Request):
 
 
 def require_auth(req: Request):
+    # Don't need to match to a value here as the callback sets user there and does the matching there.
     if not req.session.get("user", None):
         raise HTTPException(status_code=401, detail="Not Authorized")

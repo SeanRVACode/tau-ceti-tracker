@@ -1,5 +1,23 @@
 from fastapi.testclient import TestClient
+from fastapi import Request
 from main import app
+from auth import require_auth
+import os
+
+DATA = {
+    "shell": "destroyer",
+    "map_name": "outpost",
+    "exfiled": False,
+    "exfil_amount": 0,
+    "rook_friends": False,
+    "team_mates_rezzed": 0,
+    "runner_downs": 2,
+    "uesc_elims": 12,
+}
+
+
+async def override_dependency(req: Request):
+    req.session["user"] = "test@email.com"
 
 
 def test_get_all_runs():
@@ -14,3 +32,17 @@ def test_get_stats():
         resp = client.get("/stats")
         assert resp.status_code == 200
         assert isinstance(resp.json(), dict)
+
+
+def test_post_with_auth():
+    app.dependency_overrides[require_auth] = override_dependency
+    with TestClient(app) as client:
+        resp = client.post("/run", json=DATA)
+        assert resp.status_code == 200
+
+
+def test_post_without_auth():
+    app.dependency_overrides = {}
+    with TestClient(app) as client:
+        resp = client.post("/run", json=DATA)
+        assert resp.status_code == 401
