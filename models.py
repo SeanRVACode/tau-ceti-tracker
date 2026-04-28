@@ -32,4 +32,4 @@ class RunUpdate(BaseModel):
     uesc_elims: Optional[int] = None
     rook_friends: Optional[bool] = None
     team_mates_rezzed: Optional[int] = None
-    runners_down: Optional[int] = None
+    runner_downs: Optional[int] = None

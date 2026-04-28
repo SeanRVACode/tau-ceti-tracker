@@ -3,14 +3,14 @@ from models import RunCreate, RunShow, RunUpdate
 from database import get_session, Runs
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import func
-
+from sqlalchemy import func, not_
+from auth import require_auth
 
 router = APIRouter()
 
 
 @router.post("/run", response_model=RunShow)
-async def post_run(run: RunCreate, session: Session = Depends(get_session)) -> RunShow:
+async def post_run(run: RunCreate, session: Session = Depends(get_session), _=Depends(require_auth)) -> RunShow:
     """_Post a new run to the database_.
 
     Args:
@@ -70,6 +70,8 @@ async def show_stats(session: Session = Depends(get_session)) -> dict:
     # Total Runs
     total_runs = session.query(Runs).count()
     stats["total_runs"] = total_runs
+
+    # Todo I may want to separate out rook runs as I tend to rapid fire those and you can die far quicker. I also rarely get kills as rook
     if total_runs > 0:
         # Successful runs based on exfil being true
         total_successful_exfils = session.query(Runs).where(Runs.exfiled).count()
@@ -79,18 +81,26 @@ async def show_stats(session: Session = Depends(get_session)) -> dict:
         # K/D Ratio
         total_elims = session.query(func.sum(Runs.runner_downs)).scalar()
         stats["total_elims"] = total_elims
+        # total deaths
+        total_deaths = session.query(Runs).where(not_(Runs.exfiled)).count()
+        # Handle if we are just starting the database from scratch as you don't want to divide by 0
+        if total_deaths == 0:
+            total_deaths = 1
+
         # Calculate k/d ratio
-        elims_ratio = format(total_elims / total_runs, ".2f")
+        elims_ratio = format(total_elims / total_deaths, ".2f")
         stats["kd_ratio"] = elims_ratio
     else:
         # Set exfil rate to 0 if there are no runs.
         stats["exfil_rate"] = 0
-
+    # Return the stats dict
     return stats
 
 
 @router.patch("/run_edit/{id_num}", response_model=RunShow)
-async def edit_run(id_num: int, run_update: RunUpdate, session: Session = Depends(get_session)) -> RunShow:
+async def edit_run(
+    id_num: int, run_update: RunUpdate, session: Session = Depends(get_session), _=Depends(require_auth)
+) -> RunShow:
     try:
         # Retrieve the run that needs to be edited from the database
         run_to_edit = session.query(Runs).where(Runs.id == id_num).first()
@@ -113,11 +123,12 @@ async def edit_run(id_num: int, run_update: RunUpdate, session: Session = Depend
     except IntegrityError as e:
         print(e)
         session.rollback()
-        raise
+        # Raise an HTTP exception that data was not able to be edited this way.
+        raise HTTPException(status_code=422, detail="Error in editing data no changes were made.")
 
 
 @router.delete("/delete_run/{id_num}")
-async def delete_run(id_num: int, session: Session = Depends(get_session)):
+async def delete_run(id_num: int, session: Session = Depends(get_session), _=Depends(require_auth)):
     try:
         # Get Sqlalchemy orm object to delete
         run_to_delete = session.query(Runs).where(Runs.id == id_num).first()

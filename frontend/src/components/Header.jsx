@@ -1,13 +1,20 @@
 import './Header.css'
 
-export default function Header() {
+export default function Header({ authed, onLogout }) {
   return (
     <header className="header">
       <div className="header-top-bar">
-        <span className="header-label">SYSTEM // TAU CETI FIELD OPS</span>
-        <span className="header-status">
-          <span className="status-dot" /> UPLINK ACTIVE
-        </span>
+        <span className="header-label">UESC MARATHON SYSTEM // TAU CETI IV FIELD OPS</span>
+        <div className="header-top-right">
+          {authed ? (
+            <button className="header-login-link" onClick={onLogout}>[ LOGOUT ]</button>
+          ) : (
+            <a className="header-login-link" href="/api/auth/google/login">[ LOGIN ]</a>
+          )}
+          <span className="header-status">
+            <span className="status-dot" /> UPLINK ACTIVE
+          </span>
+        </div>
       </div>
 
       <div className="header-title-block">
@@ -18,7 +25,7 @@ export default function Header() {
       </div>
 
       <div className="header-bottom-bar">
-        <span>CRYO ARCHIVE — SECTOR 7</span>
+        <span>UESC MARATHON — RUNNER RECORD</span>
         <span className="cursor-blink">_</span>
       </div>
     </header>

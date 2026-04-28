@@ -1,0 +1,107 @@
+.login {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  animation: fadeIn 0.6s ease;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid var(--border-bright);
+  padding: 32px;
+  text-align: center;
+  background: var(--green-panel);
+}
+
+.login-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.login-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--red);
+}
+
+.login-status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 6px var(--red);
+  animation: blink 1.5s ease infinite;
+}
+
+.login-title {
+  font-family: var(--font-display);
+  font-size: 64px;
+  letter-spacing: 0.2em;
+  color: var(--green);
+  text-shadow:
+    0 0 10px rgba(0, 255, 65, 0.8),
+    0 0 30px rgba(0, 255, 65, 0.4);
+  line-height: 1;
+  animation: flicker 8s infinite;
+}
+
+.login-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.25em;
+  margin-top: 8px;
+}
+
+.login-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+.login-prompt {
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--yellow);
+  margin-bottom: 8px;
+}
+
+.login-subprompt {
+  font-size: 11px;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  margin-bottom: 28px;
+}
+
+.login-btn {
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  padding: 10px 24px;
+  text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+}
+
+.login-btn:hover {
+  background: var(--green);
+  color: var(--black);
+}
+
+.login-footer {
+  margin-top: 24px;
+  font-size: 18px;
+}
