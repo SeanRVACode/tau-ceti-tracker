@@ -132,3 +132,20 @@
   animation: blink 1s step-end infinite;
   color: var(--green);
 }
+
+@media (max-width: 600px) {
+  .header-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .header-title {
+    font-size: 40px;
+  }
+
+  .header-title::before,
+  .header-title::after {
+    font-size: 40px;
+  }
+}
