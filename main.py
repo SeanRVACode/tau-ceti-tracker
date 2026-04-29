@@ -23,8 +23,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(router=auth_router)
-app.include_router(router=router)
+app.include_router(router=auth_router, prefix="/api")
+app.include_router(router=router, prefix="/api")
 app.mount("/", StaticFiles(directory="./frontend/dist", html=True))
 
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("secret_key"))
