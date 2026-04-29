@@ -28,7 +28,7 @@ oauth.register(
 
 @auth_router.get("/auth/google/login")
 async def login(req: Request):
-    redirect_uri = "http://localhost:8000/auth/google/callback"
+    redirect_uri = "https://tau-ceti-tracker.onrender.com/auth/google/callback"
     return await oauth.google.authorize_redirect(req, redirect_uri)
 
 
