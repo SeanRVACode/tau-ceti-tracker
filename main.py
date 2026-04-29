@@ -6,6 +6,8 @@ from auth import auth_router
 from starlette.middleware.sessions import SessionMiddleware
 import os
 from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
+
 
 # Load the environment.
 load_dotenv()
@@ -23,6 +25,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(router=auth_router)
 app.include_router(router=router)
+app.mount("/", StaticFiles(directory="./frontend/dist", name="dist"))
 
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("secret_key"))
 
